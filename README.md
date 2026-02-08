@@ -2,6 +2,15 @@
 
 A fully functional e-commerce application built with MERN stack (MongoDB, Express.js, React.js, Node.js) that demonstrates core e-commerce functionality including user authentication, product management, cart operations, and order processing with payment simulation.
 
+## 🌐 Live Deployment
+
+- **Live Demo (Frontend – Vercel):**  
+  https://ecommerce-self-zeta.vercel.app/
+
+- **Backend API (Render):**  
+  https://ecommerce-1uns.onrender.com/
+
+
 ## 🚀 Features
 
 ### User Management
