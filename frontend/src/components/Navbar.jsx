@@ -26,7 +26,6 @@ const Navbar = () => {
               Home
             </Link>
 
-            {/* Cart is available for both guests and logged-in users */}
             <Link
               to="/cart"
               className="relative text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
