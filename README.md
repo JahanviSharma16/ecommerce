@@ -54,42 +54,9 @@ frontend/
 │   ├── pages/         # Route-based page components
 │   ├── context/       # React context for state management
 │   ├── api/          # API service functions
-│   ├── hooks/        # Custom React hooks
 │   ├── routes/       # Route configuration
-│   └── services/     # Utility services
 ```
 
-## 📋 Payment Flow
-
-### Step-by-Step Process
-1. **Order Creation**: User initiates checkout → Order created with PENDING status
-2. **Price Validation**: Backend re-validates all product prices at order time
-3. **Stock Check**: Backend verifies product availability
-4. **Payment Processing**: Order created, cart cleared, user shown processing message
-5. **Order Completion**: User can check order status in orders page
-
-### Payment Failure Handling
-- Failed payments maintain PENDING → FAILED status transition
-- Stock is preserved for failed orders
-- User can retry checkout with updated cart
-- Clear error messaging for user feedback
-
-### Price Manipulation Prevention
-- All pricing calculations happen server-side
-- Product prices fetched fresh at order creation
-- Cart stores `priceAtAdd` to prevent frontend manipulation
-- Backend validates prices before order confirmation
-
-### Stock Concurrency Management
-- Atomic stock updates using MongoDB's `$inc` operator
-- Concurrent purchase protection with stock availability checks
-- Failed payments don't affect stock levels
-- Real-time stock reflection across all users
-
-### Guest Cart Implementation
-- Local storage for unauthenticated users
-- Seamless merge on user registration/login
-- Persistent likes for guests using localStorage
 
 ## 🛠️ Setup Instructions
 
@@ -209,46 +176,7 @@ npm run build
 # Serve the dist folder with your preferred web server
 ```
 
-## 🧪 Testing the Application
 
-### 1. User Registration/Login
-1. Visit `http://localhost:5173/register`
-2. Create a new account with email and password
-3. Login with your credentials
-4. Browse products as authenticated user
-
-### 2. Guest User Experience
-1. Visit `http://localhost:5173` (home page)
-2. Browse products without logging in
-3. Add items to cart (stored in localStorage)
-4. Like products (persisted in localStorage)
-5. Try checkout - will be prompted to login
-
-### 3. Product Management
-1. Browse home appliances on the home page
-2. View product details, stock levels, and pricing
-3. Like/unlike products (heart icon)
-4. Add products to cart for purchase
-
-### 4. Cart Operations
-1. Add items to cart from product listing
-2. Go to cart page to view items
-3. Update quantities using +/- buttons
-4. View real-time cart total
-5. Remove items if needed
-
-### 5. Order Processing
-1. Click "Proceed to Checkout" from cart page
-2. System creates order and clears cart
-3. Shows "Payment processing" message
-4. Redirects to orders page
-5. Check order status in orders list
-
-### 6. Admin Features
-1. Create admin user manually in MongoDB or use existing admin
-2. Login with admin credentials
-3. Access admin routes if implemented
-4. View all users and orders
 
 ## 🔄 Common Issues & Solutions
 
@@ -270,57 +198,6 @@ npm run build
 - Restart the server after changing environment variables
 - Check that .env.example was copied to .env
 
-## 📊 API Endpoints
-
-### Authentication
-- `POST /api/auth/register` - User registration
-- `POST /api/auth/login` - User login
-- `GET /api/auth/users` - Get all users (Admin only)
-
-### Products
-- `GET /api/products` - Get all products
-- `POST /api/products` - Create product (Admin only)
-
-### Cart
-- `GET /api/cart` - Get user cart
-- `POST /api/cart/add` - Add item to cart
-- `PUT /api/cart/update` - Update cart item quantity
-
-### Likes
-- `GET /api/likes` - Get user's liked products
-- `POST /api/likes/like` - Like product
-- `POST /api/likes/unlike` - Unlike product
-
-### Orders
-- `POST /api/orders` - Create order
-- `POST /api/orders/:orderId/pay` - Process payment
-- `GET /api/orders/my` - Get user orders
-- `GET /api/orders/all` - Get all orders (Admin only)
-
-## 🎯 Key Business Rules
-
-1. **Order Before Payment**: Orders must be created before payment processing
-2. **Backend Price Control**: Product prices always validated server-side
-3. **Stock on Success**: Stock reduction only after successful payment
-4. **Idempotent Payments**: Duplicate payment success handled safely
-5. **Concurrent Purchases**: Limited stock managed atomically
-6. **Guest Limitations**: Guests cannot place orders without login
-
-## 🚀 Deployment Considerations
-
-### Production Environment Setup
-1. Use environment-specific configuration
-2. Enable HTTPS for secure API communication
-3. Configure production database with proper indexing
-4. Implement proper error logging and monitoring
-5. Set up CORS for production domains
-
-### Security Recommendations
-1. Use strong JWT secrets in production
-2. Implement rate limiting on API endpoints
-3. Add input validation and sanitization
-4. Enable MongoDB authentication
-5. Regular security updates for dependencies
 
 ## 🤝 Contributing
 
