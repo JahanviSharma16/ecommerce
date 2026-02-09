@@ -17,7 +17,9 @@ const Cart = () => {
         if (!user) {
             const guestCart = JSON.parse(localStorage.getItem("guestCart")) || [];
             const updatedCart = guestCart.map(item => {
-                if ((item._id || item.product?._id) === productId) {
+                // For guest cart, product ID could be in different places
+                const itemProductId = item.product?._id || item._id;
+                if (itemProductId === productId) {
                     return { ...item, quantity: newQuantity };
                 }
                 return item;
@@ -126,7 +128,7 @@ const Cart = () => {
                                 <div className="flex items-center space-x-2">
                                     <button
                                         onClick={() => handleQuantityChange(
-                                            item._id || item.product?._id, 
+                                            item.product?._id || item._id, 
                                             (item.quantity || 1) - 1
                                         )}
                                         disabled={updating}
@@ -139,7 +141,7 @@ const Cart = () => {
                                     </span>
                                     <button
                                         onClick={() => handleQuantityChange(
-                                            item._id || item.product?._id, 
+                                            item.product?._id || item._id, 
                                             (item.quantity || 1) + 1
                                         )}
                                         disabled={updating}
