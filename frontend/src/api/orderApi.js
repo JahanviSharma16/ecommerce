@@ -7,8 +7,7 @@ export const createOrder = async () => {
 
 export const payOrder = async (orderId, success) => {
   const res = await api.post(`/orders/${orderId}/pay`, {
-    success,
-    paymentId: `PAY_${Date.now()}`
+    success
   });
   return res.data;
 };

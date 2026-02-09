@@ -178,7 +178,68 @@ npm run build
 
 
 
-## 🔄 Common Issues & Solutions
+## � Payment Flow & Business Logic
+
+### Step-by-Step Payment Process
+
+1. **Order Creation** (`POST /orders`)
+   - Validates cart is not empty
+   - Checks stock availability for each item
+   - Calculates total using backend prices (prevents manipulation)
+   - Creates order with items and locks current prices
+   - Clears user's cart
+
+2. **Payment Simulation** (`POST /orders/:id/pay`)
+   - Accepts success/failure flag and payment ID
+   - Validates order exists and isn't already paid
+   - **Success**: Reduces product stock, marks order as PAID
+   - **Failure**: Marks order as FAILED, no stock changes
+
+### Payment Failure Handling
+
+- **Failed Payments**: Order status set to "FAILED", stock remains unchanged
+- **Duplicate Payments**: System checks if order already paid, returns early
+- **Stock Issues**: If stock depleted during payment, order fails safely
+- **Error Recovery**: All operations atomic - either complete fully or rollback
+
+### Price Manipulation Prevention
+
+- **Backend Price Control**: Prices fetched from database, not client input
+- **Order Price Locking**: Prices locked at order creation time
+- **No Client Trust**: All calculations performed server-side
+- **Validation**: Stock and price validated at multiple checkpoints
+
+### Stock Concurrency Management
+
+- **Atomic Updates**: Uses MongoDB's `$inc` with stock condition checks
+- **Race Condition Protection**: Stock check and decrement in single operation
+- **Optimistic Locking**: Only updates if sufficient stock available
+- **Rollback Safety**: Failed operations don't affect stock levels
+
+### Guest Cart Merge Logic
+
+**Current Implementation**: Guest cart stored in browser localStorage
+**Merge Process** (when user logs in):
+1. Retrieve guest cart from localStorage
+2. Send guest cart items to backend merge endpoint
+3. Backend combines with existing user cart
+4. Clear localStorage guest cart
+5. Return merged cart to frontend
+
+**Note**: Implementation optional but architecture supports seamless merge
+
+### Edge Cases Handled
+
+- **Empty Cart**: Prevents order creation with validation
+- **Insufficient Stock**: Checks availability at order creation and payment
+- **Concurrent Orders**: Atomic stock updates prevent overselling
+- **Payment Timeouts**: Orders can be retried if payment fails
+- **Product Price Changes**: Prices locked at order creation
+- **Cart Abandonment**: Guest carts persist in localStorage
+- **Network Failures**: Idempotent operations safe to retry
+- **Database Errors**: Transaction-like behavior with rollback
+
+## �🔄 Common Issues & Solutions
 
 ### Port Conflicts
 - If port 8000 is in use, change PORT in backend/.env

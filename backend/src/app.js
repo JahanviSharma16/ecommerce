@@ -12,7 +12,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "https://ecommerce-self-zeta.vercel.app"
+      "https://ecommerce-self-zeta.vercel.app",
     ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
